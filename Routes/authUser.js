@@ -1,13 +1,11 @@
-import express, { Router } from 'express'
-const router = express(Router)
+import express from 'express'
+const router = express.Router()
 
-import { registerUser, loginUser, logoutUser, updateUserProfile, getUserProfile } from '../Controllers/authUsers.js'
-import { authentication } from '../middleware/authentication.js'
+        /**Import functions from other files */
+import {loginUser, registerUser, logoutUser} from '../Controllers/authUser.js'
 
-router.post('/register', registerUser)
 router.post('/login', loginUser)
+router.post('/register', registerUser)
 router.post('/logout', logoutUser)
-router.route('/profile').get(authentication, getUserProfile).patch(authentication, updateUserProfile)
-
 
 export default router

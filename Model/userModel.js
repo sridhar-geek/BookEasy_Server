@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "please provide email"],
-    // uinque: true,
+    uinque: true,
     match: [
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         'Please provide valid email address'],
@@ -21,6 +21,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, "please provide password"],
     minLength: 6
   },
+  isAdmin:{
+    type:Boolean,
+    default:false
+  }
 }, 
 {timestamps: true}
 );
@@ -30,7 +34,6 @@ const UserSchema = new mongoose.Schema({
 // this is used to hash password even before saving it to database
 UserSchema.pre('save', async function(){
     const salt = await bcrypt.genSalt(10)
-    console.log(salt)
     this.password = await bcrypt.hash(this.password, salt)
 })
 
@@ -41,6 +44,5 @@ UserSchema.methods.comparePassword = async function( givenPassword){
 }
 
 
-const User = mongoose.model('User' ,UserSchema)
+export const User = mongoose.model('Users' ,UserSchema)
 
-export default User;
