@@ -1,32 +1,40 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "please provide name"],
-    minLength: 3
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "please provide name"],
+      minLength: 3,
+    },
+    email: {
+      type: String,
+      required: [true, "please provide email"],
+      uinque: true,
+      match: [
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        "Please provide valid email address",
+      ],
+    },
+    password: {
+      type: String,
+      required: [true, "please provide password"],
+      minLength: 6,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    profilePicture: {
+      type: String,
+      default:
+        "https://media.istockphoto.com/id/587805156/vector/profile-picture-vector-illustration.jpg?s=612x612&w=0&k=20&c=gkvLDCgsHH-8HeQe7JsjhlOY6vRBJk_sKW9lyaLgmLo=",
+    },
   },
-  email: {
-    type: String,
-    required: [true, "please provide email"],
-    uinque: true,
-    match: [
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        'Please provide valid email address'],
-  },
-  password: {
-    type: String,
-    required: [true, "please provide password"],
-    minLength: 6
-  },
-  isAdmin:{
-    type:Boolean,
-    default:false
-  }
-}, 
-{timestamps: true}
+  { timestamps: true }
 );
 
 
@@ -41,6 +49,15 @@ UserSchema.pre('save', async function(){
 UserSchema.methods.comparePassword = async function( givenPassword){
     const isCorrect = bcrypt.compare(givenPassword, this.password)
     return isCorrect;
+}
+
+//this is used to create jwt token 
+UserSchema.methods.createToken = async function(){
+  const token = await jwt.sign(
+    { id: this._id, isAdmin: this.isAdmin },
+    process.env.JWT_SECRET,{expiresIn: process.env.TIME}
+  );
+  return token;
 }
 
 

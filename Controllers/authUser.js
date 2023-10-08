@@ -1,31 +1,66 @@
-import {StatusCodes} from 'http-status-codes'
+import { StatusCodes } from "http-status-codes";
 /**Import functions */
-import {User} from "../Model/userModel.js"
-import NotFoundError from '../errors/not-found.js'
-import BadRequestError from '../errors/bad-request.js'
+import { User } from "../Model/userModel.js";
+import NotFoundError from "../errors/not-found.js";
+import BadRequestError from "../errors/bad-request.js";
 
-//desc: post new data to database and create token     route: /api/auth/register
-export const registerUser = async(req, res)=> {
-    const user = await User.create(req.body)
-    res.status(StatusCodes.CREATED).json(user)
-}
-
+//desc: post new data to database        route: /api/auth/register
+export const registerUser = async (req, res) => {
+  const user = await User.create(req.body);
+  res.status(StatusCodes.CREATED).json(user);
+};
 
 //desc: validates crendentails and create token     route: /api/auth/login
-export const loginUser = async (req, res) =>  {
-    const {email, password} = req.body;
-    const user = await User.findOne({email})
-    if(!user)
-        throw new NotFoundError('Email not registered')
-    const isPassword = await user.comparePassword(password)
-    if(!isPassword)
-        throw new BadRequestError('invalid Credentails')
-    res.status(StatusCodes.OK).json(`${email} login successful`)
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) throw new NotFoundError("Email not registered");
+  const isPassword = await user.comparePassword(password);
+  if (!isPassword) throw new BadRequestError("invalid Credentails");
+  const token = await user.createToken();
+  const { password: userPassword, ...userDetails } = user._doc;
+  res
+    .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000})
+    .status(StatusCodes.OK)
+    .json({ userDetails });
+};
 
+
+// Generates random password 
+const generatePassword =()=> {
+  let password = '';
+  let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let n = str.length;
+  for (var i = 1; i < 9; i++) {
+    password += str.charAt(Math.floor(Math.random() * n));
+  }
+  return password;
 }
 
+//desc: login user using social profiles like google   route : /api/auth/socialLogin
+export const socialLogin = async(req, res) => {
+  const {email} = req.body; 
+  const user = await User.findOne({email})
+  if (user) {
+    const token = await user.createToken();
+    const { password: userPassword, ...userDetails } = user._doc;
+    res
+      .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
+      .status(StatusCodes.OK)
+      .json({ userDetails });
+  } else {
+    const randomPassword = generatePassword()
+    const user = User.create({password:randomPassword, ...req.body})
+     const token = await user.createToken();
+     const { password: userPassword, ...userDetails } = user._doc;
+     res
+       .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
+       .status(StatusCodes.OK)
+       .json({ userDetails });
+
+    
+  }
+};
 
 //desc:      route: /api/auth/logout
-export const logoutUser = (req, res)=> {
-
-}
+export const logoutUser = (req, res) => {};
