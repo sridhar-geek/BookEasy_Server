@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import CustomAPIError from "../errors/custom-api.js"
 
-  /**Custom error handler middleware used to display custom json messages on teriminal */
 const errorHandlerMiddleware = (err, req, res, next) => {
   let customError = {
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
@@ -31,3 +30,5 @@ const errorHandlerMiddleware = (err, req, res, next) => {
 };
 
 export default errorHandlerMiddleware;
+
+  /**Custom error handler middleware used to display custom json messages on teriminal */

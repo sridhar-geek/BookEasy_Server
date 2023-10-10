@@ -9,3 +9,7 @@ class NotFoundError extends CustomAPIError {
 }
 
 export default NotFoundError;
+
+// this error will give 404 statusCode to user
+
+

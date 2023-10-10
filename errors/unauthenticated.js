@@ -9,3 +9,5 @@ class UnauthenticatedError extends CustomAPIError {
 }
 
 export default UnauthenticatedError;
+
+// this error will give 401 statusCode to user

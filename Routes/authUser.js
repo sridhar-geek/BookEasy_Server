@@ -1,12 +1,19 @@
-import express from 'express'
-const router = express.Router()
+import express from "express";
+const router = express.Router();
 
-        /**Import functions from other files */
-import {loginUser, registerUser, logoutUser, socialLogin} from '../Controllers/authUser.js'
+/**Import functions from other files */
+import {
+  loginUser,
+  registerUser,
+  logoutUser,
+  socialLogin,
+} from "../Controllers/authUser.js";
 
-router.post('/login', loginUser)
-router.post('/register', registerUser)
-router.post('/logout', logoutUser)
-router.post('/socialLogin', socialLogin)
+router.post("/login", loginUser);
+router.post("/register", registerUser);
+router.get("/logout", logoutUser);
+router.post("/socialLogin", socialLogin);
 
-export default router
+export default router;
+
+// It takes all the requests and routes accourding to it

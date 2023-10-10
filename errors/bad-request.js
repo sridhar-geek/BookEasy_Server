@@ -1,7 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import CustomAPIError from './custom-api.js'
 
-// this error is to give status 404 to user
 class BadRequestError extends CustomAPIError {
   constructor(message) {
     super(message);
@@ -10,3 +9,6 @@ class BadRequestError extends CustomAPIError {
 }
 
 export default BadRequestError;
+
+
+// this error will give 400 statusCode to user

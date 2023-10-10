@@ -12,6 +12,7 @@ import userRoutes from "./Routes/user.js";
 import authRoutes from "./Routes/authUser.js";
 import notFound from "./middleware/not-found.js";
 import errorHandler from "./middleware/error-handler.js";
+import { autherization } from "./middleware/autherization.js";
 
 /**Middlewares */
 
@@ -26,7 +27,8 @@ app.use(
     origin: "http://localhost:3000",
   })
 );
-app.use("/api/user", userRoutes);
+
+app.use("/api/user", autherization, userRoutes);
 app.use("/api/auth", authRoutes);
 app.use(notFound);
 app.use(errorHandler);

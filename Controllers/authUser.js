@@ -7,7 +7,7 @@ import BadRequestError from "../errors/bad-request.js";
 //desc: post new data to database        route: /api/auth/register
 export const registerUser = async (req, res) => {
   const user = await User.create(req.body);
-  res.status(StatusCodes.CREATED).json(user);
+  res.status(StatusCodes.CREATED).json("User registration successful");
 };
 
 //desc: validates crendentails and create token     route: /api/auth/login
@@ -20,27 +20,27 @@ export const loginUser = async (req, res) => {
   const token = await user.createToken();
   const { password: userPassword, ...userDetails } = user._doc;
   res
-    .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000})
+    .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
     .status(StatusCodes.OK)
     .json({ userDetails });
 };
 
-
-// Generates random password 
-const generatePassword =()=> {
-  let password = '';
+// Generates random password
+const generatePassword = () => {
+  let password = "";
   let str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let n = str.length;
   for (var i = 1; i < 9; i++) {
     password += str.charAt(Math.floor(Math.random() * n));
   }
   return password;
-}
+};
 
 //desc: login user using social profiles like google   route : /api/auth/socialLogin
-export const socialLogin = async(req, res) => {
-  const {email} = req.body; 
-  const user = await User.findOne({email})
+export const socialLogin = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  // checking if user is already exists, if old user assign token
   if (user) {
     const token = await user.createToken();
     const { password: userPassword, ...userDetails } = user._doc;
@@ -48,19 +48,24 @@ export const socialLogin = async(req, res) => {
       .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
       .status(StatusCodes.OK)
       .json({ userDetails });
-  } else {
-    const randomPassword = generatePassword()
-    const user = User.create({password:randomPassword, ...req.body})
-     const token = await user.createToken();
-     const { password: userPassword, ...userDetails } = user._doc;
-     res
-       .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
-       .status(StatusCodes.OK)
-       .json({ userDetails });
-
-    
+  }
+  // if user is new to website, then create new accout
+  else {
+    const randomPassword = generatePassword();
+    const user = User.create({ password: randomPassword, ...req.body });
+    const token = await user.createToken();
+    const { password: userPassword, ...userDetails } = user._doc;
+    res
+      .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
+      .status(StatusCodes.OK)
+      .json({ userDetails });
   }
 };
 
-//desc:      route: /api/auth/logout
-export const logoutUser = (req, res) => {};
+//desc:removes cookie and logout user     route: /api/auth/logout
+export const logoutUser = (req, res) => {
+  res
+    .clearCookie("access_token")
+    .status(StatusCodes.OK)
+    .json("User logout successfully");
+};

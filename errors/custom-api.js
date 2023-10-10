@@ -6,4 +6,4 @@ class CustomAPIError extends Error {
 
 export default CustomAPIError;
 
-// main error class which other class extended from
+// main error class which other class extended 

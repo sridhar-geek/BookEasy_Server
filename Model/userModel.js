@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -37,29 +36,29 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-
 /**Mongoose middleware functions*/
 // this is used to hash password even before saving it to database
-UserSchema.pre('save', async function(){
-    const salt = await bcrypt.genSalt(10)
-    this.password = await bcrypt.hash(this.password, salt)
-})
+UserSchema.pre("save", async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 //this is used to compare hasedpassword to the user given password
-UserSchema.methods.comparePassword = async function( givenPassword){
-    const isCorrect = bcrypt.compare(givenPassword, this.password)
-    return isCorrect;
-}
+UserSchema.methods.comparePassword = async function (givenPassword) {
+  const isCorrect = bcrypt.compare(givenPassword, this.password);
+  return isCorrect;
+};
 
-//this is used to create jwt token 
-UserSchema.methods.createToken = async function(){
+//this is used to create jwt token
+UserSchema.methods.createToken = async function () {
   const token = await jwt.sign(
     { id: this._id, isAdmin: this.isAdmin },
-    process.env.JWT_SECRET,{expiresIn: process.env.TIME}
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.TIME }
   );
   return token;
-}
+};
 
+export const User = mongoose.model("Users", UserSchema);
 
-export const User = mongoose.model('Users' ,UserSchema)
-
+// creates schema for the user and implemented some middlewares
