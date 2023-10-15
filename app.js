@@ -14,6 +14,10 @@ import notFound from "./middleware/not-found.js";
 import errorHandler from "./middleware/error-handler.js";
 import { autherization } from "./middleware/autherization.js";
 
+
+app.get('/', (req,res)=> {
+  res.send('<h1>Welcome to Book Easy Server</h1>')
+})
 /**Middlewares */
 
 /**used to access data from req.body */
