@@ -54,7 +54,7 @@ UserSchema.methods.createToken = async function () {
   const token = await jwt.sign(
     { id: this._id, isAdmin: this.isAdmin },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.TIME }
+    { expiresIn: '1h' }
   );
   return token;
 };

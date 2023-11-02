@@ -5,7 +5,6 @@ const router = express.Router();
 import {
   getProfile,
   updateProfile,
-  // logout,
   deleteProfile,
 } from "../Controllers/user.js";
 
