@@ -62,10 +62,8 @@ export const socialLogin = async (req, res) => {
   }
 };
 
-//desc:removes cookie and logout user     route: /api/auth/logout
-export const logoutUser = (req, res) => {
-  res
-    .clearCookie("access_token")
-    .status(StatusCodes.OK)
-    .json("User logout successfully");
+/**testing route to get all users */
+export const getAllUsers = async (req, res) => {
+  const users = await User.find();
+  res.send({ users });
 };

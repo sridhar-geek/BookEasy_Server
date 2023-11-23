@@ -6,9 +6,12 @@ import {
   getProfile,
   updateProfile,
   deleteProfile,
+  logoutUser,
 } from "../Controllers/user.js";
 
 router.route("/:id").get(getProfile).put(updateProfile).delete(deleteProfile);
+router.get('/logout/:id', logoutUser)
+
 
 export default router;
 

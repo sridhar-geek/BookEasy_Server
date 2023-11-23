@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcryptjs";
-
+/**Import functions */
 import { User } from "../Model/userModel.js";
 import UnauthenticatedError from "../errors/unauthenticated.js";
 
@@ -34,22 +34,9 @@ export const updateProfile = async (req, res) => {
     { new: true }
   );
 
-  const { password, ...userDetails } = updatedUser._doc;
+  const { password: userPassword, ...userDetails } = updatedUser._doc;
   res.status(StatusCodes.OK).json({ userDetails });
 };
-
-// export const updateProfile = async (req, res) => {
-//     if(req.user.id !== req.params.id)
-//         throw new UnauthenticatedError('Your not allowed to perform this operation')
-
-//         if(req.password)
-//             req.password = await bcrypt.hash(req.body.password, 10)
-
-//         const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body, {new:true,runValidators:true})
-//         const {password, ...userDetails} = updatedUser._doc
-
-//         res.status(StatusCodes.OK).json({userDetails})
-// };
 
 //desc:removes token and delete user account      route: /api/user/:id
 export const deleteProfile = async (req, res) => {
@@ -58,5 +45,14 @@ export const deleteProfile = async (req, res) => {
       "Your not allowed to perform this operation"
     );
   await User.findByIdAndDelete(req.params.id);
-  res.status(StatusCodes.OK).json("user account deleted....");
+  res.clearCookie("access_token").status(StatusCodes.OK).json("user account deleted....");
+};
+
+//desc:removes cookie and logout user     route: /api/user/logout
+export const logoutUser = (req, res) => {
+  if (req.user.id !== req.params.id)  throw new UnauthenticatedError('Your not allowed to perform this operation')
+    res
+      .clearCookie("access_token")
+      .status(StatusCodes.OK)
+      .json("User logout successfully");
 };

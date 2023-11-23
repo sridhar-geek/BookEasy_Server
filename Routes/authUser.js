@@ -5,13 +5,13 @@ const router = express.Router();
 import {
   loginUser,
   registerUser,
-  logoutUser,
   socialLogin,
+  getAllUsers,
 } from "../Controllers/authUser.js";
 
+router.get("/get", getAllUsers)
 router.post("/login", loginUser);
 router.post("/register", registerUser);
-router.get("/logout", logoutUser);
 router.post("/socialLogin", socialLogin);
 
 export default router;
