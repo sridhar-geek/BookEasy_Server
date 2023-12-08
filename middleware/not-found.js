@@ -1,5 +1,7 @@
-const notFound = (req, res) => res.status(404).send('Route does not exist')
-
+const notFound = (req, res) => {
+    console.log('Im in route does not exist route')
+    res.status(404).send('Route does not exist')
+}
 export default notFound
 
 
