@@ -28,15 +28,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // app.use(cors())
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: 'http://localhost:3000/*',
-//     origin: "https://book-easy-client.vercel.app/*"
-//   })
-// );
+app.use(
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000/*',
+    origin: "https://book-easy-client.vercel.app/*"
+  })
+);
 
-// app.use('/api/checkout', CheckOutRoute)
+app.use("/api/create-checkout", CheckOutRoute);
 app.use("/api/user", autherization, userRoutes);
 app.use("/api/auth", authRoutes);
 
@@ -45,31 +45,31 @@ app.get('/api/welcome' ,(req,res)=>{
 })
 
 // This is your test secret API key.
-const stripeInstance = stripe(process.env.STRIPE_KEY);
-app.post("/api/create-checkout-session", async (req, res) => {
-  console.log("request came to checkout session");
-  const data = req.body
-  console.log(data)
-  const session = await stripeInstance.checkout.sessions.create({
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          unit_amount: 500,
-          product_data: {
-            name: "hotel vizag",
-          },
-        },
-        quantity: 1,
-      },
-    ],
-    mode: "payment",
-    success_url: `http://localhost:3000?success=true`,
-    cancel_url: `http://localhost:3000?canceled=true`,
-  });
+// const stripeInstance = stripe(process.env.STRIPE_KEY);
+// app.post("/api/create-checkout-session", async (req, res) => {
+//   console.log("request came to checkout session");
+//   const data = req.body
+//   console.log(data)
+//   const session = await stripeInstance.checkout.sessions.create({
+//     line_items: [
+//       {
+//         price_data: {
+//           currency: "usd",
+//           unit_amount: 500,
+//           product_data: {
+//             name: "hotel vizag",
+//           },
+//         },
+//         quantity: 1,
+//       },
+//     ],
+//     mode: "payment",
+//     success_url: `http://localhost:3000?success=true`,
+//     cancel_url: `http://localhost:3000?canceled=true`,
+//   });
 
-  res.redirect(303, session.url);
-});
+//   res.redirect(303, session.url);
+// });
 
 app.use(notFound);
 app.use(errorHandler);

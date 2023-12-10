@@ -5,26 +5,55 @@ import stripe from "stripe";
 const stripeInstance = stripe(process.env.STRIPE_KEY);
 
 
-/**Import functions */
-import { User } from "../Model/userModel.js";
-import NotFoundError from "../errors/not-found.js";
-import BadRequestError from "../errors/bad-request.js";
-
 const DOMAIN = 'http://localhost:3000';
 
-const checkOut = async (req, res)=> {
-    const data = req.body;
-    console.log(data)
-  const session = await stripeInstance.checkout.sessions.create({
-    line_items: data,
-    payment_method_types: ["card"],
-    mode: "payment",
-    ui_mode: "embedded",
-    return_url : `${DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}`
-  });
-       res.status(StatusCodes.OK).json({ id: session.client_secret });
-       console.log(session.client_secret)
+const checkOut = async(req,res)=> {
+  const data = req.body;
+  console.log('hey I came to checkout route')
+  console.log(data)
+  const session = await stripeInstance.checkout.sessions.create(
+    {
+      line_items: [
+        {
+          price_data: {
+            currency: "inr",
+            unit_amount: data.price,
+            product_data: {
+              name: data.hotelName,
+              guests: data.guests,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      payment_method_types: ["card"],
+      mode: "payment",
+      sucess_url: `${DOMAIN}/sucess`,
+      cancel_url: `${DOMAIN}/failure`,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.STRIPE_KEY}`,
+      },
+    }
+  );
+  res.status(StatusCodes.OK).json({id:session.id})
 }
+
+
+// const checkOut = async (req, res)=> {
+//     const {data} = req.body;
+//     console.log(data)
+//   const session = await stripeInstance.checkout.sessions.create({
+//     line_items: data,
+//     payment_method_types: ["card"],
+//     mode: "payment",
+//     ui_mode: "embedded",
+//     return_url : `${DOMAIN}/return?session_id={CHECKOUT_SESSION_ID}`
+//   });
+//        res.status(StatusCodes.OK).json({ id: session.client_secret });
+//        console.log(session.client_secret)
+// }
 
 const sessionStatus = async (req, res) => {
   const session = await stripe.checkout.sessions.retrieve(req.query.session_id);
@@ -36,7 +65,7 @@ const sessionStatus = async (req, res) => {
 };
 
 router.post('/', checkOut)
-router.get('/session-status', sessionStatus)
+// router.get('/session-status', sessionStatus)
 
 export default router
 
