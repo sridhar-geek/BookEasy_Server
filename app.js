@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import stripe from "stripe";
 dotenv.config();
 const app = express();
 
@@ -43,33 +42,6 @@ app.use("/api/auth", authRoutes);
 app.get('/api/welcome' ,(req,res)=>{
   res.send('<h1>Im in welcome route</h1>')
 })
-
-// This is your test secret API key.
-// const stripeInstance = stripe(process.env.STRIPE_KEY);
-// app.post("/api/create-checkout-session", async (req, res) => {
-//   console.log("request came to checkout session");
-//   const data = req.body
-//   console.log(data)
-//   const session = await stripeInstance.checkout.sessions.create({
-//     line_items: [
-//       {
-//         price_data: {
-//           currency: "usd",
-//           unit_amount: 500,
-//           product_data: {
-//             name: "hotel vizag",
-//           },
-//         },
-//         quantity: 1,
-//       },
-//     ],
-//     mode: "payment",
-//     success_url: `http://localhost:3000?success=true`,
-//     cancel_url: `http://localhost:3000?canceled=true`,
-//   });
-
-//   res.redirect(303, session.url);
-// });
 
 app.use(notFound);
 app.use(errorHandler);
