@@ -10,7 +10,7 @@ const app = express();
 /**Imports functions from another files */
 import userRoutes from "./Routes/user.js";
 import authRoutes from "./Routes/authUser.js";
-import CheckOutRoute from './Controllers/checkOut.js'
+import CheckOutRoute from './Routes/checkOut.js'
 import notFound from "./middleware/not-found.js";
 import errorHandler from "./middleware/error-handler.js";
 import { autherization } from "./middleware/autherization.js";
@@ -23,19 +23,23 @@ app.get('/', (req,res)=> {
 /**Middlewares */
 
 /**used to access data from req.body */
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cookieParser());
 // app.use(cors())
 app.use(
   cors({
     credentials: true,
+    origin: "https://book-easy-client.vercel.app/*",
     origin: 'http://localhost:3000/*',
-    origin: "https://book-easy-client.vercel.app/*"
   })
-);
-
-app.use("/api/create-checkout", CheckOutRoute);
+  );
+  /** this middleware use to set header to application/json automatically, but it is not working as expected */
+  // app.use((req, res, next) => {
+  //   res.setHeader("Content-Type", "application/json");
+  //   next();
+  // });
+app.use("/api/payment", CheckOutRoute);
 app.use("/api/user", autherization, userRoutes);
 app.use("/api/auth", authRoutes);
 
