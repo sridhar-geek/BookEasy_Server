@@ -6,15 +6,18 @@ import BadRequestError from "../errors/bad-request.js";
 
 //desc: post new data to database        route: /api/auth/register
 export const registerUser = async (req, res) => {
+  console.log('request came to register route')
   const user = await User.create(req.body);
   res.status(StatusCodes.CREATED).json("User registration successful");
 };
 
 //desc: validates crendentails and create token     route: /api/auth/login
 export const loginUser = async (req, res) => {
+  console.log('request came to login route')
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw new NotFoundError("Email not registered");
+  console.log('email found')
   const isPassword = await user.comparePassword(password);
   if (!isPassword) throw new BadRequestError("invalid Credentails");
   const token = await user.createToken();
