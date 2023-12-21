@@ -10,7 +10,8 @@ const app = express();
 /**Imports functions from another files */
 import userRoutes from "./Routes/user.js";
 import authRoutes from "./Routes/authUser.js";
-import CheckOutRoute from './Routes/checkOut.js'
+import CheckOutRoute from './Routes/checkOut.js';
+import hotelRoutes from './Routes/hotels.js'
 import notFound from "./middleware/not-found.js";
 import errorHandler from "./middleware/error-handler.js";
 import { autherization } from "./middleware/autherization.js";
@@ -39,9 +40,10 @@ app.use(
   //   res.setHeader("Content-Type", "application/json");
   //   next();
   // });
-app.use("/api/payment", CheckOutRoute);
-app.use("/api/user", autherization, userRoutes);
-app.use("/api/auth", authRoutes);
+  app.use("/api/auth", authRoutes);
+  app.use("/api/user", autherization, userRoutes);
+  app.use("/api/payment", autherization, CheckOutRoute);
+  app.use("/api/hotel", autherization, hotelRoutes);
 
 app.get('/api/welcome' ,(req,res)=>{
   res.send('<h1>Im in welcome route</h1>')
