@@ -27,14 +27,14 @@ app.get('/', (req,res)=> {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors())
-app.use(
-  cors({
-    credentials: true,
-    origin: "https://book-easy-client.vercel.app/*",
-    origin: 'http://localhost:3000/*',
-  })
-  );
+app.use(cors())
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "https://book-easy-client.vercel.app/*",
+//     origin: 'http://localhost:3000/*',
+//   })
+//   );
   /** this middleware use to set header to application/json automatically, but it is not working as expected */
   // app.use((req, res, next) => {
   //   res.setHeader("Content-Type", "application/json");
