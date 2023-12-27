@@ -45,7 +45,7 @@ export const deleteProfile = async (req, res) => {
       "Your not allowed to perform this operation"
     );
   await User.findByIdAndDelete(req.params.id);
-  res.clearCookie("access_token").status(StatusCodes.OK).json("user account deleted....");
+  res.clearCookie("access_token").status(StatusCodes.OK).json("Account deleted....");
 };
 
 //desc:removes cookie and logout user     route: /api/user/logout
@@ -54,5 +54,5 @@ export const logoutUser = (req, res) => {
     res
       .clearCookie("access_token")
       .status(StatusCodes.OK)
-      .json("User logout successfully");
+      .json("logout successfully");
 };

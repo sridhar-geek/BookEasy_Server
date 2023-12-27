@@ -13,19 +13,20 @@ export const registerUser = async (req, res) => {
 
 //desc: validates crendentails and create token     route: /api/auth/login
 export const loginUser = async (req, res) => {
-  console.log('request came to login route')
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw new NotFoundError("Email not registered");
-  console.log('email found')
   const isPassword = await user.comparePassword(password);
   if (!isPassword) throw new BadRequestError("invalid Credentails");
   const token = await user.createToken();
   const { password: userPassword, ...userDetails } = user._doc;
-  res
-    .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
-    .status(StatusCodes.OK)
-    .json({ userDetails });
+res
+  .cookie("access_token", token, {
+    httpOnly: true,
+    maxAge: 3600 * 1000,
+  })
+  .status(StatusCodes.OK)
+  .json({ userDetails });
 };
 
 // Generates random password
@@ -46,6 +47,7 @@ export const socialLogin = async (req, res) => {
   // checking if user is already exists, if old user assign token
   if (user) {
     const token = await user.createToken();
+    console.log(token)
     const { password: userPassword, ...userDetails } = user._doc;
     res
       .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
@@ -57,6 +59,7 @@ export const socialLogin = async (req, res) => {
     const randomPassword = generatePassword();
     const user = User.create({ password: randomPassword, ...req.body });
     const token = await user.createToken();
+    console.log(token)
     const { password: userPassword, ...userDetails } = user._doc;
     res
       .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
