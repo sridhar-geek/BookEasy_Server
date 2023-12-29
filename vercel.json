@@ -2,14 +2,14 @@
     "version": 2,
     "builds": [
         {
-            "src": "*.js",
+            "src": "app.js",
             "use": "@vercel/node"
         }
     ],
-    "routes": [
+    "rewrites": [
         {
-            "src": "/(.*)",
-            "dest": "/app.js"
+            "source": "/api/:path*",
+            "destination": "https://book-easy-server.vercel.app/api/:path*"
         }
     ]
 }
