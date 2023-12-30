@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
+import morgan from "morgan";
 dotenv.config();
 const app = express();
 
@@ -23,18 +24,17 @@ app.get('/', (req,res)=> {
 
 /**Middlewares */
 
-/**used to access data from req.body */
+app.use(
+  cors({
+    origin: "https://book-easy-client.vercel.app",
+    credentials: true,
+  })
+);
+app.use(morgan('tiny'))
 // app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "https://book-easy-client.vercel.app",
-    // origin: "http://localhost:3000", 
-    credentials: true,
-  })
-);
   /** this middleware use to set header to application/json automatically, but it is not working as expected */
   // app.use((req, res, next) => {
   //   res.setHeader("Content-Type", "application/json");
