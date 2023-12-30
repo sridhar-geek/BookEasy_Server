@@ -22,8 +22,9 @@ export const loginUser = async (req, res) => {
   const { password: userPassword, ...userDetails } = user._doc;
 res
   .cookie("access_token", token, {
-    httpOnly: true,
     maxAge: 3600 * 1000,
+    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "Lax", // 'None' for production, 'Lax' for development
+    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
   })
   .status(StatusCodes.OK)
   .json({ userDetails });
