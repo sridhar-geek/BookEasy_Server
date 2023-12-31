@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-// import morgan from "morgan";
+import morgan from "morgan";
 dotenv.config();
 const app = express();
 
@@ -26,12 +26,12 @@ app.get('/', (req,res)=> {
 
 app.use(
   cors({
-    origin: "https://book-easy-client.vercel.app",
-    // origin: "http://localhost:3000",
+    // origin: "https://book-easy-client.vercel.app",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
-// app.use(morgan('tiny'))
+app.use(morgan('tiny'))
 // app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
