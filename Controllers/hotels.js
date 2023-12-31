@@ -2,16 +2,22 @@ import {StatusCodes} from 'http-status-codes'
 
 /* Imports from another files */
 import {Hotel} from '../Model/hotelModel.js'
+import {User} from '../Model/userModel.js'
 import NotFoundError from "../errors/not-found.js";
 import BadRequestError from "../errors/bad-request.js";
 
 
 // desc: creating a hotel           route: /api/hotels
 export const createHotel = async(req,res)=> {
-    const rooms = req.body.rooms  
     const hotel = await Hotel.create(req.body)
+    const user = await User.findById(req.body.user)
+    const noOfDiscounts = user.discounts
+    if (noOfDiscounts > 0){
+        await User.updateOne({_id: req.body.user}, {$set: {'discounts':noOfDiscounts-1 }})
+    }
     res.status(StatusCodes.CREATED).json('Hotel is added to your booking')
 }
+
 
 // desc : get single hotel              route: /api/hote/:id
 export const getSingleHotel = async(req,res)=> {

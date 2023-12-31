@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import cors from "cors";
-import morgan from "morgan";
+// import morgan from "morgan";
 dotenv.config();
 const app = express();
 
@@ -27,10 +27,11 @@ app.get('/', (req,res)=> {
 app.use(
   cors({
     origin: "https://book-easy-client.vercel.app",
+    // origin: "http://localhost:3000",
     credentials: true,
   })
 );
-app.use(morgan('tiny'))
+// app.use(morgan('tiny'))
 // app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -41,7 +42,8 @@ app.use(cookieParser());
   //   next();
   // });
   app.use("/api/auth", authRoutes);
-  app.use("/api/user", autherization, userRoutes);
+  // app.use("/api/user", autherization, userRoutes);
+  app.use("/api/user",  userRoutes);
   app.use("/api/payment", autherization, CheckOutRoute);
   app.use("/api/hotel", autherization, hotelRoutes);
 

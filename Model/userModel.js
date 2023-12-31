@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema(
       required: [true, "please provide password"],
       minLength: 6,
     },
+    discounts: {
+      type: Number,
+      default : 5
+    },
     isAdmin: {
       type: Boolean,
       default: false,

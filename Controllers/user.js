@@ -50,7 +50,7 @@ export const deleteProfile = async (req, res) => {
 
 //desc:removes cookie and logout user     route: /api/user/logout
 export const logoutUser = (req, res) => {
-  if (req.user.id !== req.params.id)  throw new UnauthenticatedError('Your not allowed to perform this operation')
+  // if (req.user.id !== req.params.id)  throw new UnauthenticatedError('Your not allowed to perform this operation')
     res
       .clearCookie("access_token")
       .status(StatusCodes.OK)
