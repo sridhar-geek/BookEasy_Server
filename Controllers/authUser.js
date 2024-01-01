@@ -23,7 +23,9 @@ export const loginUser = async (req, res) => {
 res
   .cookie("access_token", token, {
     maxAge: 3600 * 1000,
-    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "Lax", // 'None' for production, 'Lax' for development
+    path: "/",
+    httpOnly: true,
+    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
     secure: process.env.ENVIRONMENT === "production", // true for production, false for development
   })
   .status(StatusCodes.OK)
@@ -48,24 +50,34 @@ export const socialLogin = async (req, res) => {
   // checking if user is already exists, if old user assign token
   if (user) {
     const token = await user.createToken();
-    console.log(token)
     const { password: userPassword, ...userDetails } = user._doc;
-    res
-      .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
-      .status(StatusCodes.OK)
-      .json({ userDetails });
+res
+  .cookie("access_token", token, {
+    maxAge: 3600 * 1000,
+    path: "/",
+    httpOnly: true,
+    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
+    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
+  })
+  .status(StatusCodes.OK)
+  .json({ userDetails });
   }
   // if user is new to website, then create new accout
   else {
     const randomPassword = generatePassword();
     const user = User.create({ password: randomPassword, ...req.body });
     const token = await user.createToken();
-    console.log(token)
     const { password: userPassword, ...userDetails } = user._doc;
-    res
-      .cookie("access_token", token, { httpOnly: true, maxAge: 3600 * 1000 })
-      .status(StatusCodes.OK)
-      .json({ userDetails });
+res
+  .cookie("access_token", token, {
+    maxAge: 3600 * 1000,
+    path: "/",
+    httpOnly: true,
+    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
+    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
+  })
+  .status(StatusCodes.OK)
+  .json({ userDetails });
   }
 };
 

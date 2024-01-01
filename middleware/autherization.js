@@ -6,10 +6,7 @@ import UnauthenticatedError from "../errors/unauthenticated.js";
 
 export const autherization = async (req, res, next) => {
   let token = req.cookies.access_token;
-  console.log("request came to authorization route");
-  console.log(token);
   if (!token) throw new UnauthenticatedError("Authencation is invalid");
-
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     req.user = payload;

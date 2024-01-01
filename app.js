@@ -22,8 +22,8 @@ import { autherization } from "./middleware/autherization.js";
 app.use(
   cors({
     credentials: true,
-    origin: "https://book-easy-client.vercel.app",
-    // origin: 'http://localhost:3000',
+    // origin: "https://book-easy-client.vercel.app",
+    origin: 'http://localhost:3000',
   })
   );
 app.use(morgan('tiny'))
@@ -32,8 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/user", autherization, userRoutes);
+app.use("/api/auth",  authRoutes);
 app.use("/api/user",  userRoutes);
+// app.use("/api/user", autherization, userRoutes);
 app.use("/api/payment", autherization, CheckOutRoute);
 app.use("/api/hotel", autherization, hotelRoutes);
 
