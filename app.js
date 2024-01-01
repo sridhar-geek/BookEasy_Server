@@ -23,7 +23,7 @@ app.use(
   cors({
     credentials: true,
     origin: "https://book-easy-client.vercel.app",
-    // origin: 'http://localhost:3000/*',
+    // origin: 'http://localhost:3000',
   })
   );
 app.use(morgan('tiny'))
@@ -31,21 +31,15 @@ app.use(morgan('tiny'))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-  /** this middleware use to set header to application/json automatically, but it is not working as expected */
-  // app.use((req, res, next) => {
-  //   res.setHeader("Content-Type", "application/json");
-  //   next();
-  // });
+
+app.use("/api/user", autherization, userRoutes);
+app.use("/api/user",  userRoutes);
+app.use("/api/payment", autherization, CheckOutRoute);
+app.use("/api/hotel", autherization, hotelRoutes);
 
 app.get('/', (req,res)=> {
   res.send('<h1>Welcome to book easy server</h1>')
 })
-  app.use("/api/auth", authRoutes);
-  // app.use("/api/user", autherization, userRoutes);
-  app.use("/api/user",  userRoutes);
-  app.use("/api/payment", autherization, CheckOutRoute);
-  app.use("/api/hotel", autherization, hotelRoutes);
-
 app.get('/api/welcome' ,(req,res)=>{
   res.send('<h1>Im in welcome route</h1>')
 })
