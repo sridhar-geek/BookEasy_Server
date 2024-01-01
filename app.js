@@ -26,11 +26,11 @@ app.get('/', (req,res)=> {
 
 app.use(
   cors({
-    // origin: "https://book-easy-client.vercel.app",
-    origin: "http://localhost:3000",
     credentials: true,
+    origin: "https://book-easy-client.vercel.app",
+    // origin: 'http://localhost:3000/*',
   })
-);
+  );
 app.use(morgan('tiny'))
 // app.use(cors())
 app.use(express.urlencoded({ extended: true }));
