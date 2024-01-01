@@ -18,12 +18,7 @@ import errorHandler from "./middleware/error-handler.js";
 import { autherization } from "./middleware/autherization.js";
 
 
-app.get('/', (req,res)=> {
-  res.send('<h1>Welcome to book easy server</h1>')
-})
-
 /**Middlewares */
-
 app.use(
   cors({
     credentials: true,
@@ -41,6 +36,10 @@ app.use(cookieParser());
   //   res.setHeader("Content-Type", "application/json");
   //   next();
   // });
+
+app.get('/', (req,res)=> {
+  res.send('<h1>Welcome to book easy server</h1>')
+})
   app.use("/api/auth", authRoutes);
   // app.use("/api/user", autherization, userRoutes);
   app.use("/api/user",  userRoutes);
