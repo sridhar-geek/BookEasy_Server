@@ -6,7 +6,6 @@ import UnauthenticatedError from "../errors/unauthenticated.js";
 
 export const autherization = async (req, res, next) => {
  const header = req.headers.authorization
-
     if(!header || !header.startsWith('Bearer'))
         throw new UnauthenticatedError('Authentication invalid')
 

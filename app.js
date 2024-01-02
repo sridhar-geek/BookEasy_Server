@@ -26,7 +26,7 @@ app.use(
     // origin: 'http://localhost:3000',
   })
   );
-// app.use(morgan('tiny'))
+app.use(morgan('tiny'))
 // app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
