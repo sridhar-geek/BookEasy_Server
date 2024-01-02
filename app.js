@@ -23,7 +23,7 @@ app.use(
   cors({
     credentials: true,
     origin: "https://book-easy-client.vercel.app",
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
   })
   );
 // app.use(morgan('tiny'))
