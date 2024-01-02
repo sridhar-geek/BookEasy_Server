@@ -6,7 +6,7 @@ import BadRequestError from "../errors/bad-request.js";
 
 //desc: post new data to database        route: /api/auth/register
 export const registerUser = async (req, res) => {
-  console.log('request came to register route')
+  console.log("request came to register route");
   const user = await User.create(req.body);
   res.status(StatusCodes.CREATED).json("User registration successful");
 };
@@ -20,16 +20,17 @@ export const loginUser = async (req, res) => {
   if (!isPassword) throw new BadRequestError("invalid Credentails");
   const token = await user.createToken();
   const { password: userPassword, ...userDetails } = user._doc;
-res
-  .cookie("access_token", token, {
-    maxAge: 3600 * 1000,
-    path: "/",
-    // httpOnly: true,
-    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
-    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
-  })
-  .status(StatusCodes.OK)
-  .json({ userDetails });
+  res
+    /** cookie is not storing in browser in deployed version */
+    // .cookie("access_token", token, {
+    //   maxAge: 3600 * 1000,
+    //   path: "/",
+    //   httpOnly: true,
+    //   sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
+    //   secure: process.env.ENVIRONMENT === "production", // true for production, false for development
+    // })
+    .status(StatusCodes.OK)
+    .json({ userDetails, token });
 };
 
 // Generates random password
@@ -51,16 +52,17 @@ export const socialLogin = async (req, res) => {
   if (user) {
     const token = await user.createToken();
     const { password: userPassword, ...userDetails } = user._doc;
-res
-  .cookie("access_token", token, {
-    maxAge: 3600 * 1000,
-    path: "/",
-    // httpOnly: true,
-    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
-    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
-  })
-  .status(StatusCodes.OK)
-  .json({ userDetails });
+    res
+      /** cookie is not storing in browser in deployed version */
+      // .cookie("access_token", token, {
+      //   maxAge: 3600 * 1000,
+      //   path: "/",
+      //   httpOnly: true,
+      //   sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
+      //   secure: process.env.ENVIRONMENT === "production", // true for production, false for development
+      // })
+      .status(StatusCodes.OK)
+      .json({ userDetails, token });
   }
   // if user is new to website, then create new accout
   else {
@@ -68,16 +70,17 @@ res
     const user = User.create({ password: randomPassword, ...req.body });
     const token = await user.createToken();
     const { password: userPassword, ...userDetails } = user._doc;
-res
-  .cookie("access_token", token, {
-    maxAge: 3600 * 1000,
-    path: "/",
-    // httpOnly: true,
-    sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
-    secure: process.env.ENVIRONMENT === "production", // true for production, false for development
-  })
-  .status(StatusCodes.OK)
-  .json({ userDetails });
+    res
+      /** cookie is not storing in browser in deployed version */
+      // .cookie("access_token", token, {
+      //   maxAge: 3600 * 1000,
+      //   path: "/",
+      //   httpOnly: true,
+      //   sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
+      //   secure: process.env.ENVIRONMENT === "production", // true for production, false for development
+      // })
+      .status(StatusCodes.OK)
+      .json({ userDetails, token });
   }
 };
 
