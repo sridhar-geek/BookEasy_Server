@@ -33,9 +33,9 @@ export const updateProfile = async (req, res) => {
     },
     { new: true }
   );
-
+  const token = await updatedUser.createToken();
   const { password: userPassword, ...userDetails } = updatedUser._doc;
-  res.status(StatusCodes.OK).json({ userDetails });
+  res.status(StatusCodes.OK).json({ userDetails,token });
 };
 
 //desc:removes token and delete user account      route: /api/user/:id
