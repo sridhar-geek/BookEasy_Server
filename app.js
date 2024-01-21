@@ -22,8 +22,8 @@ import { autherization } from "./middleware/autherization.js";
 app.use(
   cors({
     credentials: true,
-    origin: "https://book-easy-client.vercel.app",
-    // origin: 'http://localhost:3000',
+    // origin: "https://book-easy-client.vercel.app",
+    origin: 'http://localhost:3000',
   })
   );
 app.use(morgan('tiny'))

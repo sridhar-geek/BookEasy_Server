@@ -31,6 +31,7 @@ const HotelSchema = new mongoose.Schema(
     amount: Number,
     arrivalDate: Date,
     departureDate: Date,
+    Symbol:String,
   },
   { timestamps: true }
 );
