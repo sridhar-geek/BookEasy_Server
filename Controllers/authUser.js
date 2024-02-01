@@ -66,7 +66,7 @@ export const socialLogin = async (req, res) => {
   // if user is new to website, then create new accout
   else {
     const randomPassword = generatePassword();
-    const user = User.create({ password: randomPassword, ...req.body });
+    const user = await User.create({ password: randomPassword, ...req.body });
     const token = await user.createToken();
     const { password: userPassword, ...userDetails } = user._doc;
     res
