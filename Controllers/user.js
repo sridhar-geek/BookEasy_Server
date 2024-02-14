@@ -4,10 +4,19 @@ import bcrypt from "bcryptjs";
 import { User } from "../Model/userModel.js";
 import UnauthenticatedError from "../errors/unauthenticated.js";
 
-//desc: post new data to database and create token     route: /api/user/:id
-export const getProfile = (req, res) => {};
+//desc: get userDetails and create token     route: /api/user/:id
+export const getProfile = async(req, res) => {
+    if (req.user.id !== req.params.id)
+      throw new UnauthenticatedError(
+        "Your not allowed to perform this operation"
+      );
+    const user = await User.findById(req.params.id);
+    res
+      .status(StatusCodes.OK)
+      .json(user);
+};
 
-//desc: validates crendentails and create token     route: /api/user/:id
+//desc: update userProfile and create token     route: /api/user/:id
 export const updateProfile = async (req, res) => {
   if (req.user.id !== req.params.id)
     throw new UnauthenticatedError(

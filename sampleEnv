@@ -1,0 +1,9 @@
+MONGO_URI = connection string from mongoDB it is used to connect database to server
+
+PORT = Port number 
+TIME = expire time for the JWT token
+JWT_SECRET = Your secret key for JWT token
+
+
+RAZORPAY_KEY_ID = keyid from razorpay website
+RAZORPAY_KEY_SECRET = secret from razorpay website

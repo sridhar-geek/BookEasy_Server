@@ -74,6 +74,7 @@ export const socialLogin = async (req, res) => {
       // .cookie("access_token", token, {
       //   maxAge: 3600 * 1000,
       //   path: "/",
+      
       //   httpOnly: true,
       //   sameSite: process.env.ENVIRONMENT === "production" ? "None" : "strict", // 'None' for production, 'Lax' for development
       //   secure: process.env.ENVIRONMENT === "production", // true for production, false for development
